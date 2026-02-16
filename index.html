@@ -776,7 +776,7 @@
             </ul>
             <div class="visitor-counter">
                 <span class="counter-dot"></span>
-                <span id="visitorCount">Loading...</span>
+                <span id="visitorCount">0 visitors</span>
             </div>
         </nav>
     </header>
@@ -810,11 +810,16 @@
     <!-- Short URL Section -->
     <section class="short-url-section">
         <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; margin-bottom: 24px;">Share the Knowledge</h2>
-        <div class="short-url-box" onclick="copyShortUrl()">
-            <span>omnillm.ai</span>
-            <span class="copy-icon">📋</span>
+        <div style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
+            <div class="short-url-box" onclick="copyShortUrl()" style="border-color: #22c55e;">
+                <span>leonmurrayaust.github.io/oceanrouter</span>
+                <span class="copy-icon">📋</span>
+            </div>
+            <div style="padding: 12px 20px; background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 8px; font-size: 0.85rem; color: #fbbf24; max-width: 400px;">
+                ✨ <strong>omnillm.ai</strong> is available! Purchase this domain to enable the short URL.
+            </div>
         </div>
-        <p style="color: rgba(255,255,255,0.4); margin-top: 16px; font-size: 0.9rem;">Click to copy easy-to-share link</p>
+        <p style="color: rgba(255,255,255,0.4); margin-top: 16px; font-size: 0.9rem;">Click to copy current site URL</p>
     </section>
 
     <!-- Models Section -->
@@ -972,10 +977,19 @@
             `).join('');
         }
 
-        // Visitor Counter
+        // Visitor Counter - Reset to 0 and track new visits
         function updateVisitorCount() {
-            const count = localStorage.getItem('omnillm_visits') || '12,847';
-            document.getElementById('visitorCount').textContent = count + ' visitors';
+            // Get current count or start at 0
+            let count = parseInt(localStorage.getItem('omnillm_visits') || '0');
+            
+            // Check if this is a new visit (not seen in this session)
+            if (!sessionStorage.getItem('omnillm_session')) {
+                count++;
+                localStorage.setItem('omnillm_visits', count);
+                sessionStorage.setItem('omnillm_session', 'true');
+            }
+            
+            document.getElementById('visitorCount').textContent = count.toLocaleString() + ' visitors';
         }
 
         // Copy Functions
@@ -985,8 +999,10 @@
         }
 
         function copyShortUrl() {
-            navigator.clipboard.writeText('omnillm.ai');
-            showToast('Short URL copied!');
+            // Copy the current page URL (GitHub Pages)
+            // omnillm.ai needs to be purchased and configured to work
+            navigator.clipboard.writeText(window.location.href);
+            showToast('Site URL copied! Get omnillm.ai domain to use short link');
         }
 
         function showToast(message) {

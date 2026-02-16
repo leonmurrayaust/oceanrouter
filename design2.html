@@ -654,7 +654,7 @@
                 </ul>
                 <div class="visitor-pill">
                     <span class="live-dot"></span>
-                    <span id="visitorCount">14,293 visitors</span>
+                    <span id="visitorCount">0 visitors</span>
                 </div>
             </div>
         </nav>
@@ -668,12 +668,15 @@
     </section>
 
     <div class="url-banner">
-        <div class="url-banner-content">
-            <p class="url-text">Share this resource: <strong>Copy the short link</strong></p>
-            <div class="url-box" onclick="copyUrl()">
-                <span>omnillm.ai</span>
+        <div class="url-banner-content" style="flex-direction: column; gap: 16px;">
+            <p class="url-text">Share this resource: <strong>Copy the site link</strong></p>
+            <div class="url-box" onclick="copyUrl()" style="min-width: 350px; justify-content: center;">
+                <span>leonmurrayaust.github.io/oceanrouter</span>
                 <span>📋</span>
             </div>
+            <p style="font-size: 0.85rem; color: var(--accent); margin-top: 8px;">
+                ✨ <strong>omnillm.ai</strong> is available! Purchase this domain to enable the short URL.
+            </p>
         </div>
     </div>
 
@@ -820,14 +823,25 @@
             `).join('');
         }
 
+        // Visitor Counter - Reset to 0 and track new visits
+        function updateVisitorCount() {
+            let count = parseInt(localStorage.getItem('omnillm_visits') || '0');
+            if (!sessionStorage.getItem('omnillm_session')) {
+                count++;
+                localStorage.setItem('omnillm_visits', count);
+                sessionStorage.setItem('omnillm_session', 'true');
+            }
+            document.getElementById('visitorCount').textContent = count.toLocaleString() + ' visitors';
+        }
+
         function copyModelId(id) {
             navigator.clipboard.writeText(id);
             showToast(`Copied "${id}"`);
         }
 
         function copyUrl() {
-            navigator.clipboard.writeText('omnillm.ai');
-            showToast('Short URL copied!');
+            navigator.clipboard.writeText(window.location.href);
+            showToast('Site URL copied! Get omnillm.ai domain for short link');
         }
 
         function showToast(msg) {
@@ -839,6 +853,7 @@
 
         renderModels();
         renderProviders();
+        updateVisitorCount();
     </script>
 </body>
 </html>

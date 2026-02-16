@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Model Hub - Free LLMs & APIs Only</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+        }
+
+        .header {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 24px 32px;
+            border-bottom: 1px solid #334155;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .free-badge {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .model-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-card:hover {
+            border-color: #22c55e;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(34, 197, 94, 0.2);
+        }
+
+        .model-card.selected {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.15);
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.5);
+        }
+
+        .model-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .model-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f8fafc;
+        }
+
+        .model-provider {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .model-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .tag-feature {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .tag-size {
+            background: rgba(168, 85, 247, 0.15);
+            color: #c084fc;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .model-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #334155;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #22c55e;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .rank {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: white;
+        }
+
+        .rank.top-3 {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+        }
+
+        /* API Providers Section */
+        .search-section {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid #475569;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #22c55e;
+        }
+
+        .filter-btn {
+            padding: 12px 20px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid #22c55e;
+            border-radius: 8px;
+            color: #22c55e;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background: rgba(34, 197, 94, 0.2);
+        }
+
+        .filter-btn.active {
+            background: #22c55e;
+            color: #0f172a;
+        }
+
+        .providers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 16px;
+        }
+
+        .provider-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .provider-card:hover {
+            border-color: #22c55e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -5px rgba(34, 197, 94, 0.2);
+        }
+
+        .provider-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .provider-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .provider-info h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #f8fafc;
+        }
+
+        .provider-info p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .provider-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 12px 0;
+        }
+
+        .feature-tag {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 20px;
+            color: #22c55e;
+        }
+
+        .provider-offer {
+            font-size: 0.9rem;
+            color: #22c55e;
+            margin: 8px 0;
+            padding: 10px 14px;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid #22c55e;
+            font-weight: 500;
+        }
+
+        .connect-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 12px;
+            font-size: 0.95rem;
+        }
+
+        .connect-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+        }
+
+        .connect-btn.connected {
+            background: linear-gradient(135deg, #64748b, #475569);
+            cursor: default;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.25rem;
+            color: #f8fafc;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .close-btn:hover {
+            color: #e2e8f0;
+        }
+
+        .api-key-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid #475569;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-family: monospace;
+            margin: 12px 0;
+            font-size: 0.9rem;
+        }
+
+        .api-key-input:focus {
+            outline: none;
+            border-color: #22c55e;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+        }
+
+        .instructions {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.7;
+            margin: 16px 0;
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+        }
+
+        .instructions a {
+            color: #22c55e;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .instructions a:hover {
+            text-decoration: underline;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #22c55e;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            display: none;
+            animation: slideIn 0.3s ease;
+            font-weight: 500;
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        .notification.error {
+            background: #ef4444;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .selected-model-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.98);
+            border-top: 2px solid #22c55e;
+            padding: 16px 32px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .selected-model-bar.show {
+            display: flex;
+        }
+
+        .selected-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .selected-label {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        .selected-name {
+            color: #22c55e;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .action-btn.secondary {
+            background: transparent;
+            border: 1px solid #475569;
+            color: #94a3b8;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .action-btn.primary:hover {
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+        }
+
+        .info-banner {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.1));
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-banner-icon {
+            font-size: 1.5rem;
+        }
+
+        .info-banner-text {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .info-banner-text strong {
+            color: #22c55e;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💚 Free Model Hub</h1>
+        <p>All free LLMs and APIs - No paid options, ever.</p>
+    </div>
+
+    <div class="container">
+        <!-- Info Banner -->
+        <div class="info-banner">
+            <span class="info-banner-icon">🎉</span>
+            <span class="info-banner-text">
+                <strong>100% Free Zone:</strong> Every model and API listed here offers free tier access. 
+                No credit cards required. Updated daily with new free options.
+            </span>
+        </div>
+
+        <!-- Top Free Models Section -->
+        <div class="section">
+            <h2 class="section-title">
+                🏆 Top Free Models
+                <span class="free-badge">Free Forever</span>
+            </h2>
+            <div class="models-grid" id="modelsGrid">
+                <!-- Models will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Free API Providers Section -->
+        <div class="section">
+            <h2 class="section-title">
+                🔌 Free API Providers
+                <span class="free-badge">Zero Cost</span>
+            </h2>
+            <div class="search-section">
+                <div class="search-controls">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search free providers, models, features...">
+                    <button class="filter-btn active" data-filter="all">All Free</button>
+                    <button class="filter-btn" data-filter="daily">Daily Credits</button>
+                    <button class="filter-btn" data-filter="generous">Generous Limits</button>
+                    <button class="filter-btn" data-filter="startup">Startup Friendly</button>
+                </div>
+                <div class="providers-grid" id="providersGrid">
+                    <!-- Providers will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Selected Model Bar -->
+    <div class="selected-model-bar" id="selectedBar">
+        <div class="selected-info">
+            <span class="selected-label">Selected Model:</span>
+            <span class="selected-name" id="selectedName">-</span>
+        </div>
+        <div class="action-btns">
+            <button class="action-btn secondary" onclick="clearSelection()">Clear</button>
+            <button class="action-btn primary" onclick="useModel()">Copy Model ID</button>
+        </div>
+    </div>
+
+    <!-- Connection Modal -->
+    <div class="modal" id="connectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Connect to <span id="modalProviderName">-</span></h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="instructions" id="modalInstructions">
+                <!-- Instructions will be inserted here -->
+            </div>
+            <input type="text" class="api-key-input" id="apiKeyInput" placeholder="Paste your free API key here">
+            <button class="submit-btn" onclick="submitApiKey()">Connect Free Account</button>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // FREE MODELS ONLY - No paid options
+        const freeModels = [
+            {
+                id: "google/gemini-2.0-flash-exp",
+                name: "Gemini 2.0 Flash",
+                provider: "Google AI Studio",
+                size: "Flash",
+                context: "1M",
+                speed: "Ultra Fast",
+                quality: 94,
+                bestFor: "Speed, massive context, daily tasks",
+                limits: "1,500 req/day",
+                apiEndpoint: "https://ai.google.dev/"
+            },
+            {
+                id: "meta-llama/llama-3.1-70b-instruct",
+                name: "Llama 3.1 70B",
+                provider: "OpenRouter / Groq",
+                size: "70B",
+                context: "128K",
+                speed: "Fast",
+                quality: 92,
+                bestFor: "Open source, coding, versatility",
+                limits: "Rate limited free tier",
+                apiEndpoint: "https://openrouter.ai/"
+            },
+            {
+                id: "deepseek/deepseek-chat",
+                name: "DeepSeek V3",
+                provider: "DeepSeek / OpenRouter",
+                size: "Large",
+                context: "64K",
+                speed: "Medium",
+                quality: 93,
+                bestFor: "Coding, reasoning, Chinese",
+                limits: "50 requests/day",
+                apiEndpoint: "https://platform.deepseek.com/"
+            },
+            {
+                id: "meta-llama/llama-3.1-8b-instruct",
+                name: "Llama 3.1 8B",
+                provider: "Groq / Together",
+                size: "8B",
+                context: "128K",
+                speed: "Very Fast",
+                quality: 85,
+                bestFor: "Speed, simple tasks, prototyping",
+                limits: "Generous limits",
+                apiEndpoint: "https://console.groq.com/"
+            },
+            {
+                id: "qwen/qwen-2.5-72b-instruct",
+                name: "Qwen 2.5 72B",
+                provider: "OpenRouter",
+                size: "72B",
+                context: "128K",
+                speed: "Medium",
+                quality: 89,
+                bestFor: "Multilingual, coding, analysis",
+                limits: "Free tier available",
+                apiEndpoint: "https://openrouter.ai/"
+            },
+            {
+                id: "nvidia/llama-3.1-nemotron-70b",
+                name: "Nemotron 70B",
+                provider: "NVIDIA / OpenRouter",
+                size: "70B",
+                context: "128K",
+                speed: "Fast",
+                quality: 91,
+                bestFor: "Roleplay, instruction following",
+                limits: "Free via OpenRouter",
+                apiEndpoint: "https://openrouter.ai/"
+            },
+            {
+                id: "mistralai/mistral-small-24b-instruct",
+                name: "Mistral Small",
+                provider: "Mistral AI",
+                size: "24B",
+                context: "32K",
+                speed: "Fast",
+                quality: 86,
+                bestFor: "General tasks, efficiency",
+                limits: "Free tier (experimental)",
+                apiEndpoint: "https://console.mistral.ai/"
+            },
+            {
+                id: "perplexity/sonar",
+                name: "Perplexity Sonar",
+                provider: "Perplexity",
+                size: "Search",
+                context: "12K",
+                speed: "Fast",
+                quality: 88,
+                bestFor: "Web search, real-time info",
+                limits: "$5 credits/month",
+                apiEndpoint: "https://www.perplexity.ai/settings/api"
+            },
+            {
+                id: "huggingfaceh4/zephyr-orpo-141b-a35b",
+                name: "Zephyr ORPO 141B",
+                provider: "Hugging Face",
+                size: "141B",
+                context: "8K",
+                speed: "Medium",
+                quality: 87,
+                bestFor: "Instruction following, chat",
+                limits: "Serverless inference",
+                apiEndpoint: "https://huggingface.co/inference-api"
+            },
+            {
+                id: "google/gemma-2-27b-it",
+                name: "Gemma 2 27B",
+                provider: "Hugging Face / Kaggle",
+                size: "27B",
+                context: "8K",
+                speed: "Fast",
+                quality: 84,
+                bestFor: "Open source, research, learning",
+                limits: "Completely free",
+                apiEndpoint: "https://huggingface.co/google/gemma-2-27b-it"
+            },
+            {
+                id: "microsoft/phi-4",
+                name: "Microsoft Phi-4",
+                provider: "Azure / Hugging Face",
+                size: "14B",
+                context: "16K",
+                speed: "Fast",
+                quality: 86,
+                bestFor: "Reasoning, small size, efficiency",
+                limits: "Free playground",
+                apiEndpoint: "https://huggingface.co/microsoft/phi-4"
+            },
+            {
+                id: "01-ai/yi-large",
+                name: "Yi Large",
+                provider: "01.AI / OpenRouter",
+                size: "Large",
+                context: "32K",
+                speed: "Medium",
+                quality: 88,
+                bestFor: "Multilingual, long context",
+                limits: "Free tier",
+                apiEndpoint: "https://openrouter.ai/"
+            }
+        ];
+
+        // FREE API PROVIDERS ONLY
+        const freeProviders = [
+            {
+                id: "google-ai-studio",
+                name: "Google AI Studio",
+                description: "Free access to Gemini models",
+                logo: "🔵",
+                category: ["daily", "generous", "startup"],
+                features: ["Gemini Pro", "1M context", "1,500 req/day", "No credit card"],
+                offer: "1,500 requests/day completely free",
+                connectionType: "api_key",
+                signupUrl: "https://aistudio.google.com/app/apikey",
+                instructions: "1. Go to Google AI Studio<br>2. Click 'Get API Key'<br>3. Create new key (no billing required)<br>4. Copy and paste below"
+            },
+            {
+                id: "openrouter",
+                name: "OpenRouter",
+                description: "Universal API for 100+ free models",
+                logo: "🔀",
+                category: ["daily", "generous", "startup"],
+                features: ["100+ models", "Free tier", "$0.05/day", "No credit card"],
+                offer: "$0.05 free credits daily (never expires)",
+                connectionType: "api_key",
+                signupUrl: "https://openrouter.ai/keys",
+                instructions: "1. Sign up at openrouter.ai<br>2. Go to 'Keys' section<br>3. Create API key<br>4. Use free tier automatically"
+            },
+            {
+                id: "groq",
+                name: "Groq",
+                description: "Ultra-fast free inference",
+                logo: "⚡",
+                category: ["generous", "startup"],
+                features: ["Free tier", "Llama 3", "Very fast", "Good limits"],
+                offer: "Generous free tier with rate limits",
+                connectionType: "api_key",
+                signupUrl: "https://console.groq.com/keys",
+                instructions: "1. Go to console.groq.com<br>2. Sign up with email<br>3. Create API key instantly<br>4. Start using free tier"
+            },
+            {
+                id: "together",
+                name: "Together AI",
+                description: "Free open source models",
+                logo: "🤝",
+                category: ["generous", "startup"],
+                features: ["$5 free credit", "100+ models", "Fine-tuning", "No credit card"],
+                offer: "$5 free credit to start (no expiry)",
+                connectionType: "api_key",
+                signupUrl: "https://api.together.xyz/settings/api-keys",
+                instructions: "1. Sign up at together.xyz<br>2. Get $5 free automatically<br>3. Generate API key<br>4. No credit card needed"
+            },
+            {
+                id: "huggingface",
+                name: "Hugging Face",
+                description: "Free inference for 100k+ models",
+                logo: "🤗",
+                category: ["generous", "startup"],
+                features: ["Serverless free", "100k+ models", "Community", "Inference API"],
+                offer: "Free serverless inference (rate limited)",
+                connectionType: "api_key",
+                signupUrl: "https://huggingface.co/settings/tokens",
+                instructions: "1. Create free account<br>2. Go to Settings > Access Tokens<br>3. Create 'Inference' token<br>4. Use thousands of models free"
+            },
+            {
+                id: "perplexity",
+                name: "Perplexity API",
+                description: "Search-powered LLM (free tier)",
+                logo: "🔍",
+                category: ["daily"],
+                features: ["Sonar models", "Real-time search", "$5/month free", "Citations"],
+                offer: "$5 free credits monthly",
+                connectionType: "api_key",
+                signupUrl: "https://www.perplexity.ai/settings/api",
+                instructions: "1. Sign up at perplexity.ai<br>2. Go to Settings > API<br>3. Generate free API key<br>4. $5 credit refreshes monthly"
+            },
+            {
+                id: "mistral",
+                name: "Mistral AI",
+                description: "Free tier for Mistral models",
+                logo: "🌪️",
+                category: ["daily", "startup"],
+                features: ["Mistral models", "European", "Free tier", "La Plateforme"],
+                offer: "Free tier with monthly limits",
+                connectionType: "api_key",
+                signupUrl: "https://console.mistral.ai/api-keys/",
+                instructions: "1. Go to console.mistral.ai<br>2. Create workspace<br>3. Access free tier<br>4. Generate API key"
+            },
+            {
+                id: "deepseek",
+                name: "DeepSeek",
+                description: "Free tier with daily limits",
+                logo: "🔮",
+                category: ["daily", "generous"],
+                features: ["DeepSeek V3", "50 req/day free", "Cheap after", "Strong coding"],
+                offer: "50 requests/day completely free",
+                connectionType: "api_key",
+                signupUrl: "https://platform.deepseek.com/api_keys",
+                instructions: "1. Sign up at platform.deepseek.com<br>2. Go to API Keys<br>3. Create key<br>4. 50 free requests/day"
+            },
+            {
+                id: "novita",
+                name: "Novita AI",
+                description: "GPU cloud with free tier",
+                logo: "☁️",
+                category: ["startup"],
+                features: ["GPU instances", "Serverless", "Free hours", "Models"],
+                offer: "Free GPU hours for developers",
+                connectionType: "api_key",
+                signupUrl: "https://novita.ai/",
+                instructions: "1. Sign up at novita.ai<br>2. Access dashboard<br>3. Get free GPU hours<br>4. Create API key"
+            },
+            {
+                id: "fireworks",
+                name: "Fireworks AI",
+                description: "Fast inference free tier",
+                logo: "🎆",
+                category: ["generous"],
+                features: ["Mixtral", "Llama", "Fast API", "$1 free"],
+                offer: "$1 free credit to start",
+                connectionType: "api_key",
+                signupUrl: "https://app.fireworks.ai/users/settings/api",
+                instructions: "1. Sign up at fireworks.ai<br>2. Get $1 free credit<br>3. Generate API key<br>4. Start experimenting"
+            },
+            {
+                id: "deepinfra",
+                name: "DeepInfra",
+                description: "Serverless free inference",
+                logo: "🔧",
+                category: ["generous", "startup"],
+                features: ["1000+ models", "Serverless", "Embeddings", "Free tier"],
+                offer: "Free tier with rate limits",
+                connectionType: "api_key",
+                signupUrl: "https://deepinfra.com/dash/api_keys",
+                instructions: "1. Sign up at deepinfra.com<br>2. Go to Dashboard<br>3. Create API key<br>4. Use free tier"
+            },
+            {
+                id: "replicate",
+                name: "Replicate",
+                description: "Run any model free",
+                logo: "🔄",
+                category: ["generous"],
+                features: ["1000s models", "$5 free", "Pay-per-use", "Community"],
+                offer: "$5 free credits to start",
+                connectionType: "api_key",
+                signupUrl: "https://replicate.com/account/api-tokens",
+                instructions: "1. Sign up at replicate.com<br>2. Get $5 free automatically<br>3. Create API token<br>4. Run any model"
+            }
+        ];
+
+        let selectedModel = null;
+        let currentFilter = 'all';
+        let currentProvider = null;
+
+        function renderModels() {
+            const container = document.getElementById('modelsGrid');
+            container.innerHTML = freeModels.map((model, index) => `
+                <div class="model-card ${selectedModel?.id === model.id ? 'selected' : ''}" onclick="selectModel('${model.id}')">
+                    <div class="rank ${index < 3 ? 'top-3' : ''}">${index + 1}</div>
+                    <div class="model-header">
+                        <div>
+                            <div class="model-name">${model.name}</div>
+                            <div class="model-provider">${model.provider}</div>
+                        </div>
+                    </div>
+                    <div class="model-tags">
+                        <span class="tag tag-size">${model.size}</span>
+                        <span class="tag tag-feature">${model.context} ctx</span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 8px;">
+                        ${model.bestFor}
+                    </div>
+                    <div class="model-stats">
+                        <div class="stat">
+                            <div class="stat-value">${model.speed}</div>
+                            <div class="stat-label">Speed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${model.quality}</div>
+                            <div class="stat-label">Quality</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" style="font-size: 0.75rem;">${model.limits}</div>
+                            <div class="stat-label">Limit</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderProviders(searchTerm = '') {
+            const container = document.getElementById('providersGrid');
+            let filtered = freeProviders;
+
+            // Apply category filter
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(p => p.category.includes(currentFilter));
+            }
+
+            // Apply search
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filtered = filtered.filter(p => 
+                    p.name.toLowerCase().includes(term) ||
+                    p.description.toLowerCase().includes(term) ||
+                    p.features.some(f => f.toLowerCase().includes(term))
+                );
+            }
+
+            container.innerHTML = filtered.map(provider => `
+                <div class="provider-card">
+                    <div class="provider-header">
+                        <div class="provider-logo">${provider.logo}</div>
+                        <div class="provider-info">
+                            <h3>${provider.name}</h3>
+                            <p>${provider.description}</p>
+                        </div>
+                    </div>
+                    <div class="provider-features">
+                        ${provider.features.map(f => `<span class="feature-tag">${f}</span>`).join('')}
+                    </div>
+                    <div class="provider-offer">✓ ${provider.offer}</div>
+                    <button class="connect-btn ${isConnected(provider.id) ? 'connected' : ''}" 
+                            onclick="openConnectModal('${provider.id}')"
+                            ${isConnected(provider.id) ? 'disabled' : ''}>
+                        ${isConnected(provider.id) ? '✓ Connected' : 'Connect Free Account'}
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function selectModel(modelId) {
+            selectedModel = freeModels.find(m => m.id === modelId);
+            renderModels();
+            
+            const bar = document.getElementById('selectedBar');
+            const name = document.getElementById('selectedName');
+            
+            if (selectedModel) {
+                bar.classList.add('show');
+                name.textContent = `${selectedModel.name} (${selectedModel.id})`;
+            } else {
+                bar.classList.remove('show');
+            }
+        }
+
+        function clearSelection() {
+            selectedModel = null;
+            renderModels();
+            document.getElementById('selectedBar').classList.remove('show');
+        }
+
+        function useModel() {
+            if (selectedModel) {
+                // Copy to clipboard
+                navigator.clipboard.writeText(selectedModel.id).then(() => {
+                    showNotification(`✓ Copied "${selectedModel.id}" to clipboard!`);
+                }).catch(() => {
+                    showNotification(`Model ID: ${selectedModel.id}`);
+                });
+            }
+        }
+
+        function openConnectModal(providerId) {
+            if (isConnected(providerId)) return;
+            
+            currentProvider = freeProviders.find(p => p.id === providerId);
+            if (!currentProvider) return;
+
+            document.getElementById('modalProviderName').textContent = currentProvider.name;
+            document.getElementById('modalInstructions').innerHTML = currentProvider.instructions + 
+                `<br><br><a href="${currentProvider.signupUrl}" target="_blank">→ Open Signup Page</a>`;
+            document.getElementById('apiKeyInput').value = '';
+            document.getElementById('connectModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('connectModal').classList.remove('active');
+            currentProvider = null;
+        }
+
+        function submitApiKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (!key) {
+                showNotification('Please enter an API key', 'error');
+                return;
+            }
+
+            if (currentProvider) {
+                // Save connection
+                const connections = JSON.parse(localStorage.getItem('freeModelHub_connections') || '{}');
+                connections[currentProvider.id] = {
+                    name: currentProvider.name,
+                    key: key,
+                    connectedAt: new Date().toISOString()
+                };
+                localStorage.setItem('freeModelHub_connections', JSON.stringify(connections));
+                
+                closeModal();
+                renderProviders(document.getElementById('searchInput').value);
+                showNotification(`✓ Connected to ${currentProvider.name}!`);
+            }
+        }
+
+        function isConnected(providerId) {
+            const connections = JSON.parse(localStorage.getItem('freeModelHub_connections') || '{}');
+            return !!connections[providerId];
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification' + (type === 'error' ? ' error' : '');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            renderProviders(e.target.value);
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderProviders(document.getElementById('searchInput').value);
+            });
+        });
+
+        // Close modal on outside click
+        document.getElementById('connectModal').addEventListener('click', (e) => {
+            if (e.target.id === 'connectModal') closeModal();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Initialize
+        renderModels();
+        renderProviders();
+    </script>
+</body>
+</html>

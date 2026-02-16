@@ -2,7 +2,7 @@
 
 A curated directory of completely free LLM models and API providers for developers.
 
-🌐 **Live Site**: https://[your-username].github.io/free-model-hub
+🌐 **Live Site**: https://leonmurrayaust.github.io/oceanrouter
 
 ## Features
 

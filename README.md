@@ -1,45 +1,112 @@
-# Free Model Hub
+# OmniLLM - Free AI Model Directory
 
-A curated directory of completely free LLM models and API providers for developers.
+Two stunning designs for a curated directory of completely free LLM models and API providers.
 
 🌐 **Live Site**: https://leonmurrayaust.github.io/oceanrouter
 
-## Features
+## ✨ Two Design Options
 
-- ✅ **100% Free** - No paid options, ever
-- 🏆 **Top 12 Free Models** - Ranked by quality and limits
-- 🔌 **12 Free API Providers** - With connection guides
-- 📋 **One-click copy** - Model IDs ready to use
-- 🔍 **Search & filter** - Find the perfect free option
+### Design 1: Dark Glassmorphism (Default - index.html)
+**Neon cyberpunk aesthetic with floating orbs**
+- Animated gradient background with floating orbs
+- Glass morphism cards with neon accents
+- Hover glow effects and smooth transitions
+- Modern Space Grotesk & Inter typography
+- Best for: Tech-forward, modern feel
 
-## How to Deploy Your Own
+**Features:**
+- 🔮 Animated gradient background
+- 💫 Glass morphism UI elements
+- 🎨 Neon blue/purple/pink accents
+- ⚡ Smooth hover animations
+- 📊 Live visitor counter
+- 🔗 Short URL sharing (omnillm.ai)
+- 🎯 Integrated ad spaces
 
-### Option 1: GitHub Pages (Recommended - Free)
+### Design 2: Minimalist Editorial (design2.html)
+**Clean, editorial aesthetic with warm tones**
+- Cream & charcoal color palette
+- Elegant serif headings (Playfair Display)
+- Clean list-based model display
+- Refined, magazine-like layout
+- Best for: Professional, sophisticated feel
 
-1. **Fork this repo** or create a new one
-2. **Upload files** to your repository
-3. **Go to Settings** → Pages
-4. **Select source**: Deploy from a branch
-5. **Choose branch**: `main` / `root`
-6. **Wait 2-3 minutes** for deployment
-7. **Visit**: `https://[your-username].github.io/[repo-name]`
+**Features:**
+- 📖 Editorial typography
+- 🎨 Warm cream & charcoal palette
+- ✦ Subtle accent details
+- 📋 List-view model display
+- 🏷️ Clean card layouts
 
-### Option 2: Netlify (Free)
+## 🚀 Switch Between Designs
 
-1. Go to [netlify.com](https://netlify.com)
-2. Drag and drop the `model-ocean` folder
-3. Get instant URL
+To use Design 2 instead:
+1. Rename `index.html` to `design1.html`
+2. Rename `design2.html` to `index.html`
+3. Commit and push
 
-### Option 3: Vercel (Free)
+## ✨ New Features
 
-1. Go to [vercel.com](https://vercel.com)
-2. Import your GitHub repo
-3. Deploy instantly
+### Visitor Counter
+- Real-time visitor count display
+- Animated "live" indicator
+- Persists in localStorage
 
-## Models Included
+### Short URL System
+- Easy-to-share: **omnillm.ai**
+- One-click copy functionality
+- Toast notifications on copy
+- Redirect page included (`redirect.html`)
 
-All models offer genuine free tier access:
+### Ad Integration
+- Two strategically placed ad spaces
+- Non-intrusive design
+- Hover effects for engagement
+- Easy to customize content
 
+## 📁 Files
+
+```
+├── index.html          # Design 1: Dark Glassmorphism (default)
+├── design1.html        # Design 1: Dark Glassmorphism (backup)
+├── design2.html        # Design 2: Minimalist Editorial
+├── redirect.html       # Short URL redirect page
+└── README.md          # This file
+```
+
+## 🎨 Customization
+
+### Colors (Design 1)
+Edit CSS variables in `index.html`:
+```css
+:root {
+    --neon-blue: #00d4ff;
+    --neon-purple: #b829dd;
+    --neon-pink: #ff006e;
+}
+```
+
+### Colors (Design 2)
+Edit CSS variables in `design2.html`:
+```css
+:root {
+    --cream: #faf9f7;
+    --charcoal: #1a1a1a;
+    --accent: #2563eb;
+}
+```
+
+### Ad Content
+Replace ad content in the HTML:
+```html
+<div class="ad-content">
+    Your Advertisement Here
+</div>
+```
+
+## 📱 Models & Providers
+
+### 12 Free Models
 1. **Google Gemini 2.0 Flash** - 1,500 req/day
 2. **Meta Llama 3.1 70B** - Rate limited free
 3. **DeepSeek V3** - 50 req/day
@@ -53,8 +120,7 @@ All models offer genuine free tier access:
 11. **Microsoft Phi-4** - Free playground
 12. **Yi Large** - Free tier
 
-## Free API Providers
-
+### 12 Free API Providers
 - **Google AI Studio** - 1,500 req/day
 - **OpenRouter** - $0.05/day (never expires)
 - **Groq** - Generous free tier
@@ -68,27 +134,38 @@ All models offer genuine free tier access:
 - **DeepInfra** - Free tier
 - **Replicate** - $5 free credit
 
-## Security Note
+## 🔧 Deployment
 
-⚠️ **API Keys**: This site stores your API keys locally in your browser. They are never sent to any server except the provider you choose to connect to.
+### GitHub Pages (Recommended)
+1. Push code to GitHub repository
+2. Go to Settings → Pages
+3. Source: Deploy from a branch
+4. Branch: main / (root)
+5. Wait 2-3 minutes
+6. Visit: `https://[username].github.io/[repo]`
 
-## Local Development
+### Custom Domain (Short URL)
+To use `omnillm.ai` or similar:
+1. Buy domain from Namecheap/Cloudflare
+2. Create CNAME record pointing to `leonmurrayaust.github.io`
+3. Add domain in GitHub Pages settings
+4. Upload `redirect.html` to your domain root for instant redirect
 
-Simply open `index.html` in your browser:
+### Netlify / Vercel
+1. Connect your GitHub repo
+2. Deploy automatically on push
+3. Custom domain supported
 
-```bash
-# Option 1: Direct open
-open index.html
+## 🔒 Security
 
-# Option 2: Simple HTTP server
-python3 -m http.server 8000
-# Then visit http://localhost:8000
-```
+- API keys stored locally in browser (localStorage)
+- Never sent to any third-party servers
+- Direct connection to chosen provider only
 
-## License
+## 📄 License
 
-MIT - Use it, modify it, share it!
+MIT - Use, modify, share freely!
 
 ---
 
-Made with 💚 for the free AI community
+**Made with 💙 for the AI community**

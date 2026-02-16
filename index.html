@@ -923,10 +923,27 @@
             { name: "Novita AI", desc: "GPU cloud with free tier", icon: "☁️", offer: "Free GPU hours", features: ["Instances", "Serverless", "Dev"] }
         ];
 
-        // Render Models
-        function renderModels() {
+        let currentFilter = 'All';
+
+        // Render Models with filter
+        function renderModels(filter = 'All') {
             const grid = document.getElementById('modelsGrid');
-            grid.innerHTML = models.map(model => `
+            let filteredModels = models;
+            
+            if (filter === 'Fast') {
+                filteredModels = models.filter(m => 
+                    m.speed === 'Ultra Fast' || m.speed === 'Very Fast' || m.speed === 'Fast'
+                );
+            } else if (filter === 'Smart') {
+                filteredModels = models.filter(m => m.quality >= 90);
+            }
+            
+            if (filteredModels.length === 0) {
+                grid.innerHTML = '<div style="text-align: center; padding: 40px; color: rgba(255,255,255,0.5);">No models match this filter</div>';
+                return;
+            }
+            
+            grid.innerHTML = filteredModels.map(model => `
                 <div class="model-card" onclick="copyModelId('${model.id}')">
                     <div class="card-header">
                         <div class="model-info">
@@ -1031,6 +1048,16 @@
                 closeModal();
             }
         }
+
+        // Filter tabs functionality
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentFilter = tab.textContent.trim();
+                renderModels(currentFilter);
+            });
+        });
 
         // Initialize
         renderModels();

@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniLLM - Curated Free AI Resources</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #faf9f7;
+            --charcoal: #1a1a1a;
+            --warm-gray: #6b6b6b;
+            --accent: #2563eb;
+            --accent-light: #3b82f6;
+            --border: #e5e5e5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(250, 249, 247, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--warm-gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--charcoal);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Visitor Counter */
+        .visitor-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--warm-gray);
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Hero */
+        .hero {
+            padding: 160px 60px 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--warm-gray);
+            margin-bottom: 32px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: var(--charcoal);
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--warm-gray);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 32px;
+            background: var(--charcoal);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .hero-cta:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Short URL Banner */
+        .url-banner {
+            background: #fff;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 30px 60px;
+        }
+
+        .url-banner-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .url-text {
+            font-size: 1.1rem;
+            color: var(--warm-gray);
+        }
+
+        .url-text strong {
+            color: var(--charcoal);
+        }
+
+        .url-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 24px;
+            background: var(--cream);
+            border: 2px solid var(--charcoal);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .url-box:hover {
+            background: var(--charcoal);
+            color: #fff;
+        }
+
+        .url-box span:first-child {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        /* Section */
+        .section {
+            padding: 100px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 60px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-title-group h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .section-title-group p {
+            color: var(--warm-gray);
+            font-size: 1.1rem;
+        }
+
+        .view-all {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .view-all:hover {
+            gap: 12px;
+        }
+
+        /* Model Cards */
+        .models-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .model-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 120px 120px 100px auto;
+            align-items: center;
+            gap: 24px;
+            padding: 24px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .model-row:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transform: translateX(8px);
+        }
+
+        .rank-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--border);
+        }
+
+        .rank-num.top {
+            color: var(--accent);
+        }
+
+        .model-info h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .model-info p {
+            font-size: 0.9rem;
+            color: var(--warm-gray);
+        }
+
+        .model-meta {
+            font-size: 0.9rem;
+            color: var(--warm-gray);
+        }
+
+        .model-meta strong {
+            color: var(--charcoal);
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .quality-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #f0fdf4;
+            color: #166534;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--charcoal);
+            color: #fff;
+            border-color: var(--charcoal);
+        }
+
+        /* Providers Grid */
+        .providers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .provider-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .provider-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .provider-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .provider-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--cream);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .provider-title h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .provider-title p {
+            font-size: 0.9rem;
+            color: var(--warm-gray);
+        }
+
+        .offer-pill {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #eff6ff;
+            color: var(--accent);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .features-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .feature-tag {
+            padding: 6px 12px;
+            background: var(--cream);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--warm-gray);
+        }
+
+        .connect-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--charcoal);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .connect-btn:hover {
+            background: var(--accent);
+        }
+
+        /* Ad Space */
+        .ad-section {
+            padding: 60px;
+            background: #fff;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ad-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .ad-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px 60px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 16px;
+            border: 1px dashed var(--border);
+        }
+
+        .ad-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .ad-content p {
+            color: var(--warm-gray);
+        }
+
+        .ad-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: 2px solid var(--charcoal);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ad-btn:hover {
+            background: var(--charcoal);
+            color: #fff;
+        }
+
+        /* Footer */
+        footer {
+            padding: 80px 60px 40px;
+            background: var(--charcoal);
+            color: #fff;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.7;
+        }
+
+        .footer-links h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 16px 24px;
+            background: var(--charcoal);
+            color: #fff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media (max-width: 1024px) {
+            .model-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 20px 30px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 140px 30px 80px;
+            }
+
+            .section {
+                padding: 60px 30px;
+            }
+
+            .url-banner-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo">OmniLLM</a>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="#models">Models</a></li>
+                    <li><a href="#providers">Providers</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+                <div class="visitor-pill">
+                    <span class="live-dot"></span>
+                    <span id="visitorCount">14,293 visitors</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <span class="hero-label">✦ 100% Free Resources</span>
+        <h1>Curated AI Models.<br><span>Zero Cost.</span></h1>
+        <p>A hand-picked directory of production-ready language models and API providers with generous free tiers for developers.</p>
+        <a href="#models" class="hero-cta">Browse Models →</a>
+    </section>
+
+    <div class="url-banner">
+        <div class="url-banner-content">
+            <p class="url-text">Share this resource: <strong>Copy the short link</strong></p>
+            <div class="url-box" onclick="copyUrl()">
+                <span>omnillm.ai</span>
+                <span>📋</span>
+            </div>
+        </div>
+    </div>
+
+    <section class="section" id="models">
+        <div class="section-header">
+            <div class="section-title-group">
+                <h2>Top Models</h2>
+                <p>12 production-ready LLMs with free tiers</p>
+            </div>
+            <a href="#" class="view-all">View All →</a>
+        </div>
+        <div class="models-list" id="modelsList">
+            <!-- Models inserted by JS -->
+        </div>
+    </section>
+
+    <section class="ad-section">
+        <div class="ad-container">
+            <div class="ad-card">
+                <div class="ad-content">
+                    <h3>Sponsor Spotlight</h3>
+                    <p>Premium cloud infrastructure for AI applications • Your brand here</p>
+                </div>
+                <button class="ad-btn">Advertise</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="providers">
+        <div class="section-header">
+            <div class="section-title-group">
+                <h2>API Providers</h2>
+                <p>12 platforms offering free access</p>
+            </div>
+        </div>
+        <div class="providers-grid" id="providersGrid">
+            <!-- Providers inserted by JS -->
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>OmniLLM</h3>
+                <p>The definitive directory of free AI resources for developers. Discover, compare, and connect to production-ready models without spending a dime.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">All Models</a></li>
+                    <li><a href="#">API Providers</a></li>
+                    <li><a href="#">Documentation</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Community</h4>
+                <ul>
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Discord</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Made with care for the AI community</p>
+            <p>© 2025 OmniLLM. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="toast" id="toast">
+        <span>✓</span>
+        <span id="toastMsg">Copied to clipboard</span>
+    </div>
+
+    <script>
+        const models = [
+            { rank: 1, name: "Gemini 2.0 Flash", provider: "Google AI Studio", context: "1M tokens", speed: "Ultra Fast", quality: 94, id: "gemini-2.0-flash" },
+            { rank: 2, name: "Llama 3.1 70B", provider: "OpenRouter", context: "128K tokens", speed: "Fast", quality: 92, id: "llama-3.1-70b" },
+            { rank: 3, name: "DeepSeek V3", provider: "DeepSeek", context: "64K tokens", speed: "Medium", quality: 93, id: "deepseek-chat" },
+            { rank: 4, name: "Llama 3.1 8B", provider: "Groq", context: "128K tokens", speed: "Very Fast", quality: 85, id: "llama-3.1-8b" },
+            { rank: 5, name: "Qwen 2.5 72B", provider: "OpenRouter", context: "128K tokens", speed: "Medium", quality: 89, id: "qwen-2.5-72b" },
+            { rank: 6, name: "Nemotron 70B", provider: "NVIDIA", context: "128K tokens", speed: "Fast", quality: 91, id: "nemotron-70b" }
+        ];
+
+        const providers = [
+            { name: "Google AI Studio", desc: "Free Gemini access", icon: "🔵", offer: "1,500 requests/day", features: ["Gemini Pro", "1M context", "No card required"] },
+            { name: "OpenRouter", desc: "Universal model API", icon: "🔀", offer: "$0.05/day free", features: ["100+ models", "Never expires", "OpenAI compatible"] },
+            { name: "Groq", desc: "Fast inference", icon: "⚡", offer: "Generous limits", features: ["Llama 3", "Very fast", "Low latency"] },
+            { name: "Together AI", desc: "Open source hosting", icon: "🤝", offer: "$5 free credit", features: ["100+ models", "Fine-tuning", "GPU cloud"] },
+            { name: "Hugging Face", desc: "Model repository", icon: "🤗", offer: "Serverless free", features: ["100k+ models", "Community", "Inference API"] },
+            { name: "Perplexity", desc: "Search LLM API", icon: "🔍", offer: "$5/month free", features: ["Real-time search", "Citations", "Sonar models"] }
+        ];
+
+        function renderModels() {
+            const list = document.getElementById('modelsList');
+            list.innerHTML = models.map(model => `
+                <div class="model-row" onclick="copyModelId('${model.id}')">
+                    <div class="rank-num ${model.rank <= 3 ? 'top' : ''}">${model.rank}</div>
+                    <div class="model-info">
+                        <h3>${model.name}</h3>
+                        <p>${model.provider}</p>
+                    </div>
+                    <div class="model-meta">
+                        <strong>${model.context}</strong>
+                        Context
+                    </div>
+                    <div class="model-meta">
+                        <strong>${model.speed}</strong>
+                        Speed
+                    </div>
+                    <div class="quality-badge">
+                        <span>★</span> ${model.quality}
+                    </div>
+                    <button class="copy-btn">Copy ID</button>
+                </div>
+            `).join('');
+        }
+
+        function renderProviders() {
+            const grid = document.getElementById('providersGrid');
+            grid.innerHTML = providers.map(p => `
+                <div class="provider-card">
+                    <div class="provider-header">
+                        <div class="provider-icon">${p.icon}</div>
+                        <div class="provider-title">
+                            <h3>${p.name}</h3>
+                            <p>${p.desc}</p>
+                        </div>
+                    </div>
+                    <span class="offer-pill">${p.offer}</span>
+                    <div class="features-list">
+                        ${p.features.map(f => `<span class="feature-tag">${f}</span>`).join('')}
+                    </div>
+                    <button class="connect-btn">Connect Free</button>
+                </div>
+            `).join('');
+        }
+
+        function copyModelId(id) {
+            navigator.clipboard.writeText(id);
+            showToast(`Copied "${id}"`);
+        }
+
+        function copyUrl() {
+            navigator.clipboard.writeText('omnillm.ai');
+            showToast('Short URL copied!');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        renderModels();
+        renderProviders();
+    </script>
+</body>
+</html>
